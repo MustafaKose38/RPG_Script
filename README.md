@@ -1,7 +1,10 @@
 # RPG_Script
 Player: Mover, PlayerController, Fighter,  ActionScheduler
+
 Enemy:CombatTarget
+
 Camera: FollowCamera
+
 İnterface:IAction
 
   Player'ı hareket ettirmek için NavMeshAgent Kullanıldı. 
