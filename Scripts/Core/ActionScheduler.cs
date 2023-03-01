@@ -19,5 +19,11 @@ namespace RPG.Core
             }
             currentAction = action;
         }
+
+        //Mevcut eylemi iptal edecek.
+        public void CancelCurrentAction()
+        {
+            StartAction(null);
+        }
     } 
 }

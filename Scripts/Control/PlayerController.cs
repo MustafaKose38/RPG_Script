@@ -1,4 +1,5 @@
 using RPG.Combat;
+using RPG.Core;
 using RPG.Movement;
 using System;
 using System.Collections;
@@ -10,31 +11,44 @@ namespace RPG.Control
 {
     public class PlayerController : MonoBehaviour
     {
-        private void Update()
+        Health health;
+        private void Start()
         {
-            if (InteractWithCombat()) return;
-            if (InteractWithMovement()) return;
-            //print("yapacak bir iþim yok"); Terrain alaný dýþýna çýktýðýmýzda bu kod çalýþýr. çünkü raycast herhangi bir varlýða geri dönüþ almayacaktýr.
+            health= GetComponent<Health>();
         }
 
-        private bool InteractWithCombat()
+        private void Update()
+        {
+
+            if (health.IsDead()) return;
+            if (InteractWithCombat()) return;
+            if (InteractWithMovement()) return;
+            
+        }
+
+        private bool InteractWithCombat()//Combat ile iletiþime geçer
         {
             RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
             foreach (RaycastHit hit in hits)
             {
                 CombatTarget target = hit.transform.GetComponent<CombatTarget>();
-                if (target == null) continue; //eðer target null ise bir sonraki öðeye geç demektir.
+                if (target == null) continue;
 
-                if (Input.GetMouseButtonDown(0))//hedef üzerinde buttona bastýysak true verir.
+                if (!GetComponent<Fighter>().CanAttack(target.gameObject))
                 {
-                    GetComponent<Fighter>().Attack(target);
+                    continue;
+                }
+
+                if (Input.GetMouseButton(0))//hedef üzerinde buttona bastýysak true verir.
+                {
+                    GetComponent<Fighter>().Attack(target.gameObject);
                 }
                 return true;
             }
             return false;
         }
 
-        private bool InteractWithMovement()
+        private bool InteractWithMovement()//Movement ile iletiþime geçer
         {
 
             RaycastHit hit;
